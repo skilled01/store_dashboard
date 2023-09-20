@@ -24,22 +24,151 @@ const routes: Array<RouteRecordRaw> = [
           breadcrumbs: ["Dashboards"],
         },
       },
+
       {
-        path: "/brands",
-        name: "brands",
-        component: () => import("@/views/Brands.vue"),
+        path: "/inventory",
+        name: "Inventory",
         meta: {
-          pageTitle: "Brands",
-          breadcrumbs: ["Brands"],
+          breadcrumbs: ["Inventory"],
+        },
+        children: [
+          {
+            path: "categories",
+            name: "categories",
+            meta: {
+              pageTitle: "Categories",
+            },
+            children: [
+              {
+                path: "",
+                name: "all categories",
+                component: () => import("@/views/Categories/Categories.vue"),
+                meta: {
+                  pageTitle: "Categories",
+                },
+              },
+              {
+                path: "create",
+                name: "create category",
+                component: () => import("@/views/Categories/create.vue"),
+                meta: {
+                  pageTitle: "Create Category",
+                },
+              }
+            ]
+          },
+
+          {
+            path: "brands",
+            name: "brands",
+            component: () => import("@/views/Brands.vue"),
+            meta: {
+              pageTitle: "Brands",
+            },
+          },
+          {
+            path: "taxes",
+            name: "taxes",
+            component: () => import("@/views/Taxes.vue"),
+            meta: {
+              pageTitle: "Taxes",
+            },
+          },
+          {
+            path: "warehouses",
+            name: "warehouses",
+            component: () => import("@/views/Warehouses.vue"),
+            meta: {
+              pageTitle: "Warehouses",
+            },
+          },
+        ]
+      },
+
+      {
+        path: "/users/",
+        name: "Users",
+        meta: {
+          breadcrumbs: ["Users"],
+        },
+        children: [
+          {
+            path: "admins",
+            name: "admins",
+            component: () => import("@/views/users/Admins.vue"),
+            meta: {
+              pageTitle: "Admins",
+            },
+          },
+          {
+            path: "customers",
+            name: "customers",
+            component: () => import("@/views/users/Customers.vue"),
+            meta: {
+              pageTitle: "Customers",
+            },
+          },
+        ]
+      },
+
+      {
+        path: "/theme/",
+        name: "Theme",
+        meta: {
+          breadcrumbs: ["Theme"],
+        },
+        children: [
+          {
+            path: "about",
+            name: "about",
+            meta: {
+              pageTitle: "About",
+              breadcrumbs: ["Theme", "About"],
+            },
+            children: [
+              {
+                path: "",
+                name: "all",
+                component: () => import("@/views/About/About.vue"),
+              },
+              {
+                path: "create",
+                name: "add section",
+                component: () => import("@/views/About/create.vue"),
+                meta: {
+                  pageTitle: "Add About Section",
+                },
+              },
+            ]
+          },
+          {
+            path: "branches",
+            name: "Branches",
+            component: () => import("@/views/Branches/Branches.vue"),
+            meta: {
+              pageTitle: "Branches",
+            },
+          }
+        ]
+      },
+
+      {
+        path: "/terms",
+        name: "terms",
+        component: () => import("@/views/Terms.vue"),
+        meta: {
+          pageTitle: "Terms",
+          breadcrumbs: ["Terms"],
         },
       },
+
       {
-        path: "/taxes",
-        name: "taxes",
-        component: () => import("@/views/Taxes.vue"),
+        path: "/privacy-police",
+        name: "privacy policy",
+        component: () => import("@/views/Policy.vue"),
         meta: {
-          pageTitle: "Taxes",
-          breadcrumbs: ["Taxes"],
+          pageTitle: "Privacy Policy",
+          breadcrumbs: ["Privacy Policy"],
         },
       },
     ],

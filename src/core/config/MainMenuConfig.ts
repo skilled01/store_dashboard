@@ -35,27 +35,25 @@ const MainMenuConfig: Array<MenuItem> = [
             sub: [
               {
                 heading: "All Categories",
-                route: "/store/categories",
+                route: "/inventory/categories",
               },
               {
                 heading: "Create Category",
-                route: "/store/categories",
+                route: "/inventory/categories/create",
               },
             ],
           },
           {
-            sectionTitle: "wizards",
-            route: "/wizard",
-            sub: [
-              {
-                heading: "horizontal",
-                route: "/crafted/pages/wizards/horizontal",
-              },
-              {
-                heading: "vertical",
-                route: "/crafted/pages/wizards/vertical",
-              },
-            ],
+            heading: "Brands",
+            route: "/inventory/brands",
+          },
+          {
+            heading: "Taxes",
+            route: "/inventory/taxes",
+          },
+          {
+            heading: "Warehouses",
+            route: "/inventory/warehouses",
           },
         ],
       },
@@ -84,44 +82,68 @@ const MainMenuConfig: Array<MenuItem> = [
       {
         sectionTitle: "all orders",
         route: "/orders",
-        keenthemesIcon: "abstract-38",
+        keenthemesIcon: "people",
         bootstrapIcon: "bi-cart",
       },
     ],
   },
   {
     heading: "users",
-    route: "/order",
+    route: "/users",
     pages: [
       {
-        sectionTitle: "admins",
-        route: "/users/admin",
-        keenthemesIcon: "abstract-38",
+        heading: "Admins",
+        route: "/users/admins",
+        keenthemesIcon: "profile-circle",
         bootstrapIcon: "bi-cart",
       },
       {
-        sectionTitle: "Customers",
+        heading: "Customers",
         route: "/users/customers",
-        keenthemesIcon: "abstract-38",
+        keenthemesIcon: "people",
         bootstrapIcon: "bi-cart",
       },
     ],
   },
   {
-    heading: "theme",
-    route: "/order",
+    heading: "Theme",
+    route: "/theme/about",
     pages: [
       {
-        sectionTitle: "admins",
-        route: "/users/admin",
+        sectionTitle: "About Us",
+        route: "/theme/about",
         keenthemesIcon: "abstract-38",
         bootstrapIcon: "bi-cart",
+        sub: [
+          {
+            heading: "All Abouts",
+            route: "/theme/about",
+          },
+          {
+            heading: "Create",
+            route: "/theme/about/create",
+          },
+        ]
       },
       {
-        sectionTitle: "Customers",
-        route: "/users/customers",
-        keenthemesIcon: "abstract-38",
+        heading: "Branches",
+        route: "/theme/Branches",
+        keenthemesIcon: "arrow-mix",
         bootstrapIcon: "bi-cart",
+      }
+    ],
+  },
+  {
+    heading: "Settings",
+    route: "/theme/about",
+    pages: [
+      {
+        heading: "Terms & Conditions",
+        route: "/terms",
+      },
+      {
+        heading: "Privacy Policy",
+        route: "/privacy-police",
       },
     ],
   },

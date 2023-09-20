@@ -9,6 +9,7 @@ TIP: To get started with clean router change path to @/router/clean.ts.
 import router from "./router";
 import ElementPlus from "element-plus";
 import i18n from "@/core/plugins/i18n";
+import CKEditor from '@ckeditor/ckeditor5-vue';
 
 //imports for app initialization
 import ApiService from "@/core/services/ApiService";
@@ -36,5 +37,7 @@ app.use(i18n);
 app.directive("tooltip", (el) => {
   new Tooltip(el);
 });
+
+app.use(CKEditor);
 
 app.mount("#app");

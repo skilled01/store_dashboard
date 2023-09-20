@@ -1,7 +1,6 @@
 <template>
   <custom-modal2 @save="save">
     <slot></slot>
-
     <template #basic>
       <div class="mb-10 fv-row">
         <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
@@ -44,14 +43,12 @@
       </div>
 
       <div class="mb-10 fv-row">
-        <label class="form-label mb-3">{{ translate('type') }}</label>
-        <select
+        <label class="form-label mb-3">{{ translate('number') }}</label>
+        <input
+          type="text"
           class="form-control form-control-lg form-control-solid"
-          v-model="form.type"
-        >
-          <option value="inclusive">{{translate('inclusive')}}</option>
-          <option value="exclusive">{{translate('exclusive')}}</option>
-        </select>
+          v-model="form.number"
+        />
         <p
           class="fv-plugins-message-container invalid-feedback"
         >
@@ -59,12 +56,26 @@
       </div>
 
       <div class="mb-10 fv-row">
-        <label class="form-label mb-3">{{ translate('value') }}</label>
+        <label class="form-label mb-3">{{ translate('city') }}</label>
         <input
-          type="number"
+          type="text"
           class="form-control form-control-lg form-control-solid"
-          v-model="form.value"
+          v-model="form.location.city"
         />
+        <p
+          class="fv-plugins-message-container invalid-feedback"
+        >
+        </p>
+      </div>
+
+      <div class="mb-10 fv-row">
+        <label class="form-label mb-3">{{ translate('address') }}</label>
+        <textarea
+          type="text"
+          class="form-control form-control-lg form-control-solid"
+          v-model="form.location.address"
+        >
+      </textarea>
         <p
           class="fv-plugins-message-container invalid-feedback"
         >
@@ -79,8 +90,8 @@
 import CustomModal2 from "@/components/custom/custom-modal2.vue";
 import {useI18n} from "vue-i18n";
 import { ref, watch } from "vue";
-import { useTaxesStore } from "@/stores/taxes";
 import AlertService from "@/core/services/AlertService";
+import { useWarehousesStore } from "@/stores/warehouses";
 
 const { t, te } = useI18n();
 
@@ -97,8 +108,11 @@ let form = ref({
     ar: null,
     en: null
   },
-  type: 'inclusive',
-  value: null
+  number: 'inclusive',
+  location: {
+    city: null,
+    address: null
+  }
 })
 
 let props = defineProps({
@@ -109,8 +123,11 @@ let props = defineProps({
         ar: null,
         en: null
       },
-      type: 'inclusive',
-      value: null
+      number: 'inclusive',
+      location: {
+        city: null,
+        address: null
+      }
     }
   }
 })
@@ -118,8 +135,8 @@ let props = defineProps({
 watch(props, () => {
   form.value.name.ar = props.data?.name.ar
   form.value.name.en = props.data?.name.en
-  form.value.type = props.data?.type
-  form.value.value = props.data?.value
+  form.value.number = props.data?.number
+  form.value.location = props.data?.location
   form.value.id = props.data?.id
 })
 
@@ -127,12 +144,12 @@ const save = async () => {
   if (props.data) {
     console.log(form.value)
     delete form.value.type;
-    await useTaxesStore().update(form.value)
-    AlertService(useTaxesStore())
+    await useWarehousesStore().update(form.value)
+    AlertService(useWarehousesStore())
   }
   else {
-    await useTaxesStore().create(form.value)
-    AlertService(useTaxesStore())
+    await useWarehousesStore().create(form.value)
+    AlertService(useWarehousesStore())
   }
 }
 </script>

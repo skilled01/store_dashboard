@@ -2,20 +2,20 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import ApiService from "@/core/services/ApiService";
 
-export interface Brand {
+export interface Branch {
   id: number
   name: object;
-  image: string|object;
+  image: string;
   status: string
 }
 
-export const useBrandsStore = defineStore("brands", () => {
+export const useBranchesStore = defineStore("branches", () => {
   const errors = ref({});
-  const brands = ref<Array<Brand>>([]);
+  const branches = ref<Array<Branch>>([]);
   let links = ref({});
 
-  function store(brand: Brand) {
-    brands.value.push(brand);
+  function store(branch: Branch) {
+    branches.value.push(branch);
     errors.value = {};
   }
 
@@ -24,27 +24,27 @@ export const useBrandsStore = defineStore("brands", () => {
     links.value = link
   }
 
-  function updateBrand(item: Brand) {
-    let index = brands.value.findIndex(brand =>  brand.id === item.id);
-    brands.value[index] = item;
+  function updateBranch(item: Branch) {
+    let index = branches.value.findIndex(branch =>  branch.id === item.id);
+    branches.value[index] = item;
   }
 
-  function updateBrandStatus(id: Number, status: string) {
-    let index = brands.value.findIndex(brand =>  brand.id === id);
-    brands.value[index].status = status
+  function updateBranchStatus(id: Number, status: string) {
+    let index = branches.value.findIndex(branch =>  branch.id === id);
+    branches.value[index].status = status
   }
 
-  function deleteBrand(id: Number) {
-    brands.value = brands.value.filter(brand =>  brand.id !== id)
+  function deleteBranch(id: Number) {
+    branches.value = branches.value.filter(branch =>  branch.id !== id)
   }
 
   function setError(error: any) {
     errors.value = { ...error };
   }
 
-  async function create(payload: Brand) {
+  async function create(payload: Branch) {
     try {
-      let result0 = await ApiService.post("brands", payload);
+      let result0 = await ApiService.post("branches", payload);
       const {data} = result0;
       store(data.data);
       return true;
@@ -55,13 +55,11 @@ export const useBrandsStore = defineStore("brands", () => {
     }
   }
 
-  async function update(payload: Brand) {
+  async function update(payload: Branch) {
     try {
-      let id = payload.id;
-      delete payload.id;
-      let result0 = await ApiService.put(`brands/${id}`, payload);
+      let result0 = await ApiService.put(`branches/${payload.id}`, payload);
       const {data} = result0;
-      updateBrand(data.data);
+      updateBranch(data.data);
       return true;
     } catch (e) {
       const {response} = e;
@@ -70,12 +68,12 @@ export const useBrandsStore = defineStore("brands", () => {
     }
   }
 
-  async function updateStatus(payload: Brand) {
+  async function updateStatus(payload: Branch) {
     try {
       let status = payload.status === 'active' ? 'disabled': 'active';
-      let result0 = await ApiService.put(`/status/update/brand/${payload.id}/${status}`, {});
+      let result0 = await ApiService.put(`/status/update/branch/${payload.id}/${status}`, {});
       const {data} = result0;
-      updateBrandStatus(payload.id, status);
+      updateBranchStatus(payload.id, status);
       return true;
     } catch (e) {
       const {response} = e;
@@ -84,10 +82,10 @@ export const useBrandsStore = defineStore("brands", () => {
     }
   }
 
-  async function destroy(payload: Brand) {
+  async function destroy(payload: Branch) {
     try {
-      await ApiService.delete(`brands/${payload.id}`);
-      deleteBrand(payload.id);
+      await ApiService.delete(`branches/${payload.id}`);
+      deleteBranch(payload.id);
       return true;
     } catch (e) {
       const {response} = e;
@@ -98,9 +96,9 @@ export const useBrandsStore = defineStore("brands", () => {
 
   async function get(query: object|null = null) {
     try {
-      let result0 = await ApiService.get("brands?" + new URLSearchParams(query));
+      let result0 = await ApiService.get("branches?" + new URLSearchParams(query));
       const {data} = result0;
-      brands.value = data?.data?.data;
+      branches.value = data?.data?.data;
       updateLinks(data?.data);
       return true;
     } catch (e) {
@@ -112,7 +110,7 @@ export const useBrandsStore = defineStore("brands", () => {
 
   return {
     errors,
-    brands,
+    branches,
     links,
     create,
     get,

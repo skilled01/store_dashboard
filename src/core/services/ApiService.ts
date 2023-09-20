@@ -91,7 +91,8 @@ class ApiService {
    * @returns Promise<AxiosResponse>
    */
   public static put(resource: string, params: any): Promise<AxiosResponse> {
-    return ApiService.vueInstance.axios.put(`${resource}`, params);
+    params._method = 'put';
+    return ApiService.vueInstance.axios.post(`${resource}`, params);
   }
 
   /**

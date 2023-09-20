@@ -2,20 +2,19 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import ApiService from "@/core/services/ApiService";
 
-export interface Brand {
+export interface Category {
   id: number
   name: object;
-  image: string|object;
   status: string
 }
 
-export const useBrandsStore = defineStore("brands", () => {
+export const useCategoriesStore = defineStore("categories", () => {
   const errors = ref({});
-  const brands = ref<Array<Brand>>([]);
+  const categories = ref<Array<Category>>([]);
   let links = ref({});
 
-  function store(brand: Brand) {
-    brands.value.push(brand);
+  function store(category: Category) {
+    categories.value.push(category);
     errors.value = {};
   }
 
@@ -24,27 +23,27 @@ export const useBrandsStore = defineStore("brands", () => {
     links.value = link
   }
 
-  function updateBrand(item: Brand) {
-    let index = brands.value.findIndex(brand =>  brand.id === item.id);
-    brands.value[index] = item;
+  function updateCategory(item: Category) {
+    let index = categories.value.findIndex(category =>  category.id === item.id);
+    categories.value[index] = item;
   }
 
-  function updateBrandStatus(id: Number, status: string) {
-    let index = brands.value.findIndex(brand =>  brand.id === id);
-    brands.value[index].status = status
+  function updateCategoryStatus(id: Number, status: string) {
+    let index = categories.value.findIndex(category =>  category.id === id);
+    categories.value[index].status = status
   }
 
-  function deleteBrand(id: Number) {
-    brands.value = brands.value.filter(brand =>  brand.id !== id)
+  function deleteCategory(id: Number) {
+    categories.value = categories.value.filter(category =>  category.id !== id)
   }
 
   function setError(error: any) {
     errors.value = { ...error };
   }
 
-  async function create(payload: Brand) {
+  async function create(payload: Category) {
     try {
-      let result0 = await ApiService.post("brands", payload);
+      let result0 = await ApiService.post("categories", payload);
       const {data} = result0;
       store(data.data);
       return true;
@@ -55,13 +54,11 @@ export const useBrandsStore = defineStore("brands", () => {
     }
   }
 
-  async function update(payload: Brand) {
+  async function update(payload: Category) {
     try {
-      let id = payload.id;
-      delete payload.id;
-      let result0 = await ApiService.put(`brands/${id}`, payload);
+      let result0 = await ApiService.put(`categories/${payload.id}`, payload);
       const {data} = result0;
-      updateBrand(data.data);
+      updateCategory(data.data);
       return true;
     } catch (e) {
       const {response} = e;
@@ -70,12 +67,12 @@ export const useBrandsStore = defineStore("brands", () => {
     }
   }
 
-  async function updateStatus(payload: Brand) {
+  async function updateStatus(payload: Category) {
     try {
       let status = payload.status === 'active' ? 'disabled': 'active';
-      let result0 = await ApiService.put(`/status/update/brand/${payload.id}/${status}`, {});
+      let result0 = await ApiService.put(`/status/update/category/${payload.id}/${status}`, {});
       const {data} = result0;
-      updateBrandStatus(payload.id, status);
+      updateCategoryStatus(payload.id, status);
       return true;
     } catch (e) {
       const {response} = e;
@@ -84,10 +81,10 @@ export const useBrandsStore = defineStore("brands", () => {
     }
   }
 
-  async function destroy(payload: Brand) {
+  async function destroy(payload: Category) {
     try {
-      await ApiService.delete(`brands/${payload.id}`);
-      deleteBrand(payload.id);
+      await ApiService.delete(`categories/${payload.id}`);
+      deleteCategory(payload.id);
       return true;
     } catch (e) {
       const {response} = e;
@@ -98,9 +95,9 @@ export const useBrandsStore = defineStore("brands", () => {
 
   async function get(query: object|null = null) {
     try {
-      let result0 = await ApiService.get("brands?" + new URLSearchParams(query));
+      let result0 = await ApiService.get("categories?" + new URLSearchParams(query));
       const {data} = result0;
-      brands.value = data?.data?.data;
+      categories.value = data?.data?.data;
       updateLinks(data?.data);
       return true;
     } catch (e) {
@@ -112,7 +109,7 @@ export const useBrandsStore = defineStore("brands", () => {
 
   return {
     errors,
-    brands,
+    categories,
     links,
     create,
     get,

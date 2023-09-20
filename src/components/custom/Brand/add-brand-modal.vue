@@ -8,8 +8,8 @@
             type="text"
             class="form-control form-control-lg form-control-solid"
             name="ar_name"
-            placeholder=""
-            value=""
+            :value="formData.ar_name"
+            v-model="formData.ar_name"
         />
         <ErrorMessage
             class="fv-plugins-message-container invalid-feedback"
@@ -23,8 +23,7 @@
             type="text"
             class="form-control form-control-lg form-control-solid"
             name="en_name"
-            placeholder=""
-            value=""
+            v-model="formData.en_name"
         />
         <ErrorMessage
             class="fv-plugins-message-container invalid-feedback"
@@ -57,7 +56,7 @@ import {useI18n} from "vue-i18n";
 import * as Yup from "yup";
 import {onMounted, onUpdated, ref, watch} from "vue";
 import {mixed} from "yup";
-import {useBrandsStore} from "@/stores/brands";
+import { useBrandsStore } from "@/stores/brands";
 import AlertService from "@/core/services/AlertService";
 import {ErrorMessage, Field, useForm} from "vee-validate";
 
@@ -81,6 +80,11 @@ const formData = ref({
   image: ''
 });
 
+watch(props, () => {
+  formData.value.ar_name = props?.data?.name.ar ?? "";
+  formData.value.en_name = props?.data?.name.en ?? "";
+})
+
 const schema = [
   Yup.object({}),
   Yup.object({
@@ -96,21 +100,6 @@ const schema = [
   Yup.object({}),
 ];
 
-const { resetForm } = useForm({
-  validationSchema: schema,
-});
-
-watch(props, () => {
-  formData.value.ar_name = props?.data?.name.ar ?? ''
-  formData.value.en_name = props?.data?.name.en ?? ''
-
-  resetForm({
-    values: {
-      ...formData.value,
-    },
-  });
-});
-
 const save = async (data) => {
   let brand = {
     name: {
@@ -120,9 +109,16 @@ const save = async (data) => {
     image: data.image
   };
 
-  await useBrandsStore().create(brand)
+  if (props?.data) {
+    brand.id = props.data.id
+    await useBrandsStore().update(brand)
+    AlertService(useBrandsStore(), translate('brand updated successfully'))
+  } else {
+    await useBrandsStore().create(brand)
+    AlertService(useBrandsStore(), translate('brand created successfully'))
+  }
 
-  AlertService(useBrandsStore())
+
 }
 
 </script>
