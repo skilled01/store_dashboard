@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, onBeforeMount, onMounted } from "vue";
+import { defineComponent, nextTick, onBeforeMount, onMounted, provide } from "vue";
 import { RouterView } from "vue-router";
 import { useConfigStore } from "@/stores/config";
 import { useThemeStore } from "@/stores/theme";
@@ -20,6 +20,8 @@ export default defineComponent({
     const configStore = useConfigStore();
     const themeStore = useThemeStore();
     const bodyStore = useBodyStore();
+
+    provide('locale', 'en');
 
     onBeforeMount(() => {
       /**

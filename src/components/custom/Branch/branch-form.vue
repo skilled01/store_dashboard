@@ -77,16 +77,29 @@
       </div>
 
       <div class="mb-10 fv-row">
-        <label class="form-label mb-3">{{ translate('phone') }}</label>
-        <input
-          type="text"
-          class="form-control form-control-lg form-control-solid"
-          v-model="form.phone"
-        />
-        <p
-          class="fv-plugins-message-container invalid-feedback"
-        >
-        </p>
+        <div class="mb-5 d-flex justify-content-between">
+          <h3>
+            {{ translate("Phones") }}
+          </h3>
+          <button
+            @click.prevent="form.phone.push(0)"
+            class="btn btn-icon btn-outline"
+          >
+            +
+          </button>
+        </div>
+        <div v-for="(phone,i) of form.phone">
+          <label class="form-label mb-3">{{ translate('phone') }}</label>
+          <input
+            type="text"
+            class="form-control form-control-lg form-control-solid"
+            v-model="form.phone[i]"
+          />
+          <p
+            class="fv-plugins-message-container invalid-feedback"
+          >
+          </p>
+        </div>
       </div>
     </template>
   </custom-modal2>
@@ -120,7 +133,7 @@ let form = ref({
     en: null
   },
   email: null,
-  phone: null
+  phone: []
 })
 
 let props = defineProps({
@@ -136,7 +149,7 @@ let props = defineProps({
         en: null
       },
       email: null,
-      phone: null
+      phone: []
     }
   }
 })

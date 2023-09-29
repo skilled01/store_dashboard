@@ -14,18 +14,18 @@
 
     <!--begin::Menu item-->
     <div class="menu-item px-5">
-      <slot name="status">
+      <slot v-if="showStatus" name="status">
         <a @click.prevent="change" href="#" class="menu-link px-5"> {{translate(model.status === 'active' ? 'disable': 'active')}} </a>
       </slot>
     </div>
 
-    <div class="menu-item px-5">
+    <div v-if="showEdit" class="menu-item px-5">
       <slot name="edit">
         <a @click.prevent="edit" href="#" class="menu-link px-5"> {{translate('Edit')}} </a>
       </slot>
     </div>
 
-    <div class="menu-item px-5">
+    <div v-if="showDelete" class="menu-item px-5">
       <slot name="delete">
         <a @click.prevent="destroy" href="#" class="menu-link text-danger px-5"> {{translate('Delete')}} </a>
       </slot>
@@ -38,9 +38,9 @@
 </template>
 
 <script lang="ts" setup>
-import {useI18n} from "vue-i18n";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import AlertService from "@/core/services/AlertService";
+import { translate } from "@/core/services/TranslationService";
 
 const props = defineProps({
   model: Object,
@@ -59,18 +59,22 @@ const props = defineProps({
   store: {
     type: Object,
     default: null
-  }
+  },
+  showEdit: {
+    type: Boolean,
+    default: true
+  },
+
+  showDelete: {
+    type: Boolean,
+    default: true
+  },
+
+  showStatus: {
+    type: Boolean,
+    default: true
+  },
 })
-
-const { t, te } = useI18n();
-
-const translate = (text: string) => {
-  if (te(text)) {
-    return t(text);
-  } else {
-    return text;
-  }
-};
 
 const change = async () => {
   if (props.statusMethod) {

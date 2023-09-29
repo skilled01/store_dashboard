@@ -1,36 +1,28 @@
 <template>
-  <custom-table :headers="headers" :list="store.abouts" has-actions>
-    {{ translate('About') }}
+  <custom-table :headers="headers" :list="store.subscriptions" has-actions>
+    {{ translate('Subscriptions') }}
 
-    <template #actions>
-      <button
-          @click="data = null"
-          type="button"
-          class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_account"
-      >
-        {{translate('Add')}}
-      </button>
-    </template>
-
-    <template #image="prop">
-      <div class="cursor-pointer symbol symbol-35px">
-        <img :src="prop.item.image ?? getAssetPath('public/media/misc/auth-bg.png')">
-      </div>
-    </template>
-
-    <template #title="prop">
+    <template #email="prop">
       <a
           href="#"
           class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"
-      >{{ prop.item.title[locale]}}</a
+      >{{ prop.item.email}}</a
       >
     </template>
 
-    <template #description="prop">
-      <div
+    <template #ip="prop">
+      <a
+        href="#"
         class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"
-        v-html="prop.item.description[locale]"
-      ></div
+      >{{ prop.item.ip}}</a
+      >
+    </template>
+
+    <template #location="prop">
+      <a
+        href="#"
+        class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"
+      >{{ prop.item.location}}</a
       >
     </template>
 
@@ -53,13 +45,7 @@
           >
             <i class="bi bi-three-dots fs-5"></i>
           </button>
-          <Dropdown :store="store" :model="prop.item" :show-status="false">
-            <template #edit>
-              <a href="#"
-                 @click="data = prop.item"
-                 class="menu-link px-5"
-              > {{translate('Edit')}} </a>
-            </template>
+          <Dropdown :store="store" :model="prop.item" :show-edit="false" :show-status="false">
           </Dropdown>
 
         </div>
@@ -77,20 +63,17 @@
 <script lang="ts" setup>
 import CustomTable from "@/components/custom/custom-table.vue";
 import {onMounted, onUpdated, ref} from "vue";
-import {getAssetPath} from "@/core/helpers/assets";
-import {useI18n} from "vue-i18n";
 import Dropdown from "@/components/custom/model-option-dropdown.vue";
 import {MenuComponent} from "@/assets/ts/components";
 import { Bootstrap5Pagination } from "laravel-vue-pagination";
-import { useAboutsStore } from "@/stores/abouts";
+import { translate } from "@/core/services/TranslationService";
+import { useSubscriptionsStore } from "@/stores/subscriptions";
 
-const { t, te } = useI18n();
-
-let headers = ['id', 'title', 'image', 'description',  'date', 'Actions'];
+let headers = ['id', 'email', 'ip', 'location', 'Actions'];
 
 let locale = 'ar';
 
-const store = useAboutsStore();
+const store = useSubscriptionsStore();
 
 const changePage = async (e) => {
   await store.get({page: e})
@@ -104,14 +87,6 @@ onMounted(() => {
 onUpdated(() => {
   MenuComponent.reinitialization()
 })
-
-const translate = (text: string) => {
-  if (te(text)) {
-    return t(text);
-  } else {
-    return text;
-  }
-};
 
 let data = ref(null)
 

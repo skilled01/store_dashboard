@@ -65,11 +65,11 @@ const MainMenuConfig: Array<MenuItem> = [
         sub: [
           {
             heading: "All Products",
-            route: "/store/products",
+            route: "/products",
           },
           {
             heading: "Create Product",
-            route: "/store/products",
+            route: "/products/create",
           },
         ],
       },
@@ -128,6 +128,18 @@ const MainMenuConfig: Array<MenuItem> = [
       {
         heading: "Branches",
         route: "/theme/Branches",
+        keenthemesIcon: "arrow-mix",
+        bootstrapIcon: "bi-cart",
+      },
+      {
+        heading: "Sliders",
+        route: "/theme/sliders",
+        keenthemesIcon: "arrow-mix",
+        bootstrapIcon: "bi-cart",
+      },
+      {
+        heading: "Subscriptions",
+        route: "/theme/subscriptions",
         keenthemesIcon: "arrow-mix",
         bootstrapIcon: "bi-cart",
       }

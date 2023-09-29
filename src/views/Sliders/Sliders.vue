@@ -1,16 +1,15 @@
 <template>
-  <custom-table :headers="headers" :list="store.branches" has-actions>
-    {{ translate('Branches') }}
+  <custom-table :headers="headers" :list="store.sliders" has-actions>
+    {{ translate('Sliders') }}
 
     <template #actions>
       <button
-          @click="data = null"
-          type="button"
-          class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_account"
+        @click="$router.push('/theme/sliders/create')"
+        type="button"
+        class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_account"
       >
-        {{translate('Add Branch')}}
+        {{translate('Add Slider')}}
       </button>
-      <branch-form :data="data" />
     </template>
 
     <template #image="prop">
@@ -21,23 +20,26 @@
 
     <template #name="prop">
       <a
-          href="#"
-          class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"
-      >{{ prop.item.name[locale]}}</a
+        href="#"
+        class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"
+      >{{ prop.item.name}}</a
       >
     </template>
 
-    <template #address="prop">
+
+    <template #page="prop">
       <a
+        href="#"
         class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"
-      >{{ prop.item.address[locale]}}</a
+      >{{ prop.item.page}}</a
       >
     </template>
 
-    <template #description="prop">
-      <div
+    <template #classes="prop">
+      <a
+        href="#"
         class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"
-      >{{ prop.item.description[locale]}}</div
+      >{{ prop.item.classes}}</a
       >
     </template>
 
@@ -54,42 +56,40 @@
 
     <template #date="prop">
       <a
-          href="#"
-          class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"
+        href="#"
+        class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"
       >{{ prop.item.created_at }}</a
       >
     </template>
 
     <template #Actions="prop">
-        <div>
-          <button
-              type="button"
-              class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"
-              data-kt-menu-trigger="{default:'click', lg: 'hover'}"
-              data-kt-menu-placement="bottom-end"
-              data-kt-menu-flip="top-end"
-          >
-            <i class="bi bi-three-dots fs-5"></i>
-          </button>
-          <Dropdown :store="store" :model="prop.item">
-            <template #edit>
-              <a href="#"
-                 @click="data = prop.item"
-                 class="menu-link px-5"
-                 data-bs-toggle="modal"
-                 data-bs-target="#kt_modal_create_account"
-              > {{translate('Edit')}} </a>
-            </template>
-          </Dropdown>
+      <div>
+        <button
+          type="button"
+          class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"
+          data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+          data-kt-menu-placement="bottom-end"
+          data-kt-menu-flip="top-end"
+        >
+          <i class="bi bi-three-dots fs-5"></i>
+        </button>
+        <Dropdown :store="store" :model="prop.item">
+          <template #edit>
+            <a
+              @click="router.push(`/products/${prop.item.id}/edit`)"
+              class="menu-link px-5"
+            > {{translate('Edit')}} </a>
+          </template>
+        </Dropdown>
 
-        </div>
+      </div>
 
     </template>
   </custom-table>
 
   <bootstrap5-pagination
     class="mt-5"
-   :data="store.links"
+    :data="store.links"
     @pagination-change-page="changePage"
   ></bootstrap5-pagination>
 </template>
@@ -101,15 +101,15 @@ import {getAssetPath} from "@/core/helpers/assets";
 import Dropdown from "@/components/custom/model-option-dropdown.vue";
 import {MenuComponent} from "@/assets/ts/components";
 import { Bootstrap5Pagination } from "laravel-vue-pagination";
-import { useBranchesStore } from "@/stores/branches";
-import BranchForm from "@/components/custom/Branch/branch-form.vue";
+import router from "@/router";
+import { useSlidersStore } from "@/stores/sliders";
 import { translate } from "@/core/services/TranslationService";
 
-let headers = ['id', 'name', 'email', 'phone', 'address', 'status', 'date', 'Actions'];
+let headers = ['id', 'name', 'image', 'page',  'classes', 'status', 'date', 'Actions'];
 
 let locale = 'ar';
 
-const store = useBranchesStore();
+const store = useSlidersStore();
 
 const changePage = async (e) => {
   await store.get({page: e})

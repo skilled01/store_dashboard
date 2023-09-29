@@ -84,6 +84,41 @@ const routes: Array<RouteRecordRaw> = [
           },
         ]
       },
+      {
+        path: "/products",
+        name: "Products",
+        meta: {
+          breadcrumbs: ["Products"],
+        },
+        children: [
+          {
+            path: "",
+            name: "all products",
+            component: () => import("@/views/Products/products.vue"),
+            meta: {
+              pageTitle: "Products",
+            },
+          },
+          {
+            path: "create",
+            name: "create product",
+            component: () => import("@/views/Products/create.vue"),
+            meta: {
+              pageTitle: "Create Product",
+            },
+          },
+          {
+            path: ":id/edit",
+            name: "update-product",
+            component: () => import("@/views/Products/create.vue"),
+            meta: {
+              pageTitle: "Update Product",
+            },
+
+          }
+        ]
+
+      },
 
       {
         path: "/users/",
@@ -147,6 +182,41 @@ const routes: Array<RouteRecordRaw> = [
             component: () => import("@/views/Branches/Branches.vue"),
             meta: {
               pageTitle: "Branches",
+            },
+          },
+          {
+            path: "sliders",
+            name: "Sliders",
+            meta: {
+              pageTitle: "Sliders",
+              breadcrumbs: ["Theme", "Sliders"],
+            },
+            children: [
+              {
+                path: "",
+                name: "all Sliders",
+                component: () => import("@/views/Sliders/Sliders.vue"),
+                meta: {
+                  pageTitle: "Sliders",
+                },
+              },
+              {
+                path: "create",
+                name: "create_slider",
+                component: () => import("@/views/Sliders/Form.vue"),
+                meta: {
+                  pageTitle: "Slider Form",
+                },
+              },
+            ]
+          },
+
+          {
+            path: "subscriptions",
+            name: "Subscriptions",
+            component: () => import("@/views/Subscriptions.vue"),
+            meta: {
+              pageTitle: "Subscriptions",
             },
           }
         ]

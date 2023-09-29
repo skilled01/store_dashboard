@@ -29,18 +29,22 @@
       <form>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
-            <input type="text"  class="form-control form-control-lg form-control-solid mb-4" v-model="title.ar" :placeholder="translate('Arabic Title')">
-            <ckeditor :editor="editor" v-model="description.ar" :config="editorConfig"></ckeditor>
+            <input type="text"  class="form-control form-control-lg form-control-solid mb-4" v-model="form.title.ar" :placeholder="translate('Arabic Title')">
+            <editor v-model="form.description.ar" />
           </div>
 
           <div class="tab-pane fade show" id="kt_tab_pane_2" role="tabpanel">
-            <input type="text"  class="form-control form-control-lg form-control-solid mb-4" v-model="title.en" :placeholder="translate('English Title')">
-            <ckeditor :editor="editor" v-model="description.en" :config="editorConfig"></ckeditor>
+            <input type="text"  class="form-control form-control-lg form-control-solid mb-4" v-model="form.title.en" :placeholder="translate('English Title')">
+            <editor  v-model="form.description.en" />
           </div>
         </div>
 
         <div class="mt-4">
-          <uploader server="http://127.0.0.1:8000/api/media/upload">
+          <uploader
+            server="http://127.0.0.1:8000/api/media/upload"
+            v-model="form.images"
+            @add="(media) => slider.images.push(media.name)"
+          >
           </uploader>
         </div>
 
@@ -53,42 +57,60 @@
 </template>
 
 <script setup>
-import { useI18n } from "vue-i18n";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import ApiService from "@/core/services/ApiService";
-import Swal from "sweetalert2/dist/sweetalert2.js";
 import Uploader from "vue-media-upload";
+import { translate } from "@/core/services/TranslationService";
+import Editor from "@/components/custom/editor.vue";
+import { useRoute } from "vue-router";
+import { useAboutsStore } from "@/stores/abouts";
+import AlertService from "@/core/services/AlertService";
 
-const { t, te } = useI18n();
-const translate = (text) => {
-  if (te(text)) {
-    return t(text);
-  } else {
-    return text;
+
+let schema = {
+  images: [],
+  title: {
+    ar: '',
+    en: ''
+  },
+  description: {
+    ar: '',
+    en: ''
   }
-};
+}
 
-let description = ref({
-  ar: '',
-  en: ''
-})
+let form = ref(schema)
 
-let title = ref({
-  ar: '',
-  en: ''
-})
-
-let editor =  ref(ClassicEditor);
-let editorConfig =  ref({
-// The configuration of the editor.
-})
 
 onMounted(async () => {
 
 })
 
-const save = async () => {
+let router = useRoute()
 
+watch(router, () => {
+  init()
+})
+
+async function init() {
+  if (router.name === 'update-about') {
+    let result = await ApiService.get(`abouts/${router.params.id}`)
+    form.value = result.data.data
+  }
+  else {
+    product.value = schema
+  }
+}
+
+let store = useAboutsStore();
+
+const save = async () => {
+  if (router.name === 'update-about') {
+    await store.update(form.value)
+    AlertService(store, translate("item updated successfully"));
+  } else {
+    await store.create(form.value)
+    AlertService(store, translate("item updated successfully"));
+  }
 }
 </script>

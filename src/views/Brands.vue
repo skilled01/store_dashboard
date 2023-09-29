@@ -85,13 +85,12 @@ import CustomTable from "@/components/custom/custom-table.vue";
 import {useBrandsStore} from "@/stores/brands";
 import {onMounted, onUpdated, ref} from "vue";
 import {getAssetPath} from "@/core/helpers/assets";
-import {useI18n} from "vue-i18n";
 import AddBrandModal from "@/components/custom/Brand/add-brand-modal.vue";
 import Dropdown from "@/components/custom/model-option-dropdown.vue";
 import {MenuComponent} from "@/assets/ts/components";
 import { Bootstrap5Pagination } from "laravel-vue-pagination";
+import { translate } from "../core/services/TranslationService";
 
-const { t, te } = useI18n();
 
 let headers = ['id', 'image', 'name', 'status', 'date', 'Actions'];
 
@@ -100,7 +99,6 @@ let locale = 'ar';
 const store = useBrandsStore();
 
 const changePage = async (e) => {
-  console.log(e)
   await store.get({page: e})
 }
 
@@ -112,14 +110,6 @@ onMounted(() => {
 onUpdated(() => {
   MenuComponent.reinitialization()
 })
-
-const translate = (text: string) => {
-  if (te(text)) {
-    return t(text);
-  } else {
-    return text;
-  }
-};
 
 let data = ref(null)
 
